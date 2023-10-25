@@ -51,9 +51,9 @@ class Ui_Dialog(object):
         self.verticalLayout_3.addWidget(self.phoneNoField, 0, QtCore.Qt.AlignHCenter)
         self.horizontalLayout.addLayout(self.verticalLayout_3)
         self.verticalLayout_4.addLayout(self.horizontalLayout)
-        self.pushButton = QtWidgets.QPushButton(self.verticalLayoutWidget_4)
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout_4.addWidget(self.pushButton)
+        self.exportButton = QtWidgets.QPushButton(self.verticalLayoutWidget_4)
+        self.exportButton.setObjectName("exportButton")
+        self.verticalLayout_4.addWidget(self.exportButton)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -64,4 +64,4 @@ class Ui_Dialog(object):
         self.label.setText(_translate("Dialog", "From:"))
         self.label_2.setText(_translate("Dialog", "To:"))
         self.label_3.setText(_translate("Dialog", "Phone #"))
-        self.pushButton.setText(_translate("Dialog", "Export"))
+        self.exportButton.setText(_translate("Dialog", "Export"))
