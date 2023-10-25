@@ -1,8 +1,10 @@
 from GUI import MainWindowGUI
 from PyQt5 import QtWidgets
-from PasswordEntryDlg import PasswordEntryDlg
-from EditTextDlg import EditTextDlg
-from ExportDlg import ExportDlg
+from dialogs.PasswordEntryDlg import PasswordEntryDlg
+from dialogs.EditTextDlg import EditTextDlg
+from dialogs.ExportDlg import ExportDlg
+from dialogs.PhoneFoundDlg import PhoneFoundDlg
+from dialogs.PhoneNotFoundDlg import PhoneNotFoundDlg
 
 
 class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
@@ -20,8 +22,9 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
     # prompts the user to enter a password. On password success, the text edit
     # dialog pops up and the user can change the text message to be sent.
     def editTextMessage(self):
-        self.openPasswordDialog()
-        self.openEditTextDialog()
+        passwordCorrect = self.openPasswordDialog()
+        if passwordCorrect:
+            self.openEditTextDialog()
 
     def openEditTextDialog(self):
         dlg = EditTextDlg(self)
@@ -32,12 +35,27 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
         dlg.exec()
 
     def exportPhoneRegistry(self):
-        self.openPasswordDialog()
-        self.openExportDialog()
+        passWordCorrect = self.openPasswordDialog()
+        if passWordCorrect:
+            self.openExportDialog()
 
     def registerNumber(self):
+        #TODO: Change how it checks if phone found
+        if False:  # DB Contains phone #
+            self.phoneFoundDialog()
+        else:  # DB does not contain phone #
+            self.phoneNotFoundDialog()
         print("Registering")
 
+    def phoneFoundDialog(self):
+        dlg = PhoneFoundDlg(self)
+        dlg.exec()
+
+    def phoneNotFoundDialog(self):
+        dlg = PhoneNotFoundDlg(self)
+        dlg.exec()
+    
     def openPasswordDialog(self):
         dlg = PasswordEntryDlg(self)
         dlg.exec()
+        return dlg.passwordCorrect
