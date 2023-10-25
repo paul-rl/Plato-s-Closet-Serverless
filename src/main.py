@@ -7,8 +7,6 @@ from MainWindow import MainWindow
 def main():
     app = QApplication([])
     window = MainWindow()
-
-    
     window.show()
     app.exec_()
 

@@ -5,6 +5,7 @@ from dialogs.EditTextDlg import EditTextDlg
 from dialogs.ExportDlg import ExportDlg
 from dialogs.PhoneFoundDlg import PhoneFoundDlg
 from dialogs.PhoneNotFoundDlg import PhoneNotFoundDlg
+import database
 
 
 class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
@@ -12,6 +13,10 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         self.setupUi(self)
+
+        # TODO: Don't recreate tables every time
+        self.connection = database.connect()
+        database.create_table(self.connection)
 
         # Connect buttons
         self.editTextButton.clicked.connect(self.editTextMessage)
@@ -29,7 +34,7 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
     def openEditTextDialog(self):
         dlg = EditTextDlg(self)
         dlg.exec()
-    
+
     def openExportDialog(self):
         dlg = ExportDlg(self)
         dlg.exec()
@@ -40,19 +45,22 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
             self.openExportDialog()
 
     def registerNumber(self):
-        #TODO: Change how it checks if phone found
-        if False:  # DB Contains phone #
-            self.phoneFoundDialog()
-        else:  # DB does not contain phone #
-            self.phoneNotFoundDialog()
-        print("Registering")
+        # Remove all non-numeric characters from phone number
+        vendorPhoneNo = self.VendorPhoneNoInputField.text()
+        vendorPhoneNo = ''.join(c for c in vendorPhoneNo if c.isdigit())
+        
+        orderNo = 0
+        if database.contains(self.connection, vendorPhoneNo, orderNo):
+            self.phoneFoundDialog(vendorPhoneNo, orderNo)
+        else:
+            self.phoneNotFoundDialog(vendorPhoneNo, orderNo)
 
-    def phoneFoundDialog(self):
-        dlg = PhoneFoundDlg(self)
+    def phoneFoundDialog(self, phoneNo, orderNo):
+        dlg = PhoneFoundDlg(phoneNo, orderNo, self)
         dlg.exec()
 
-    def phoneNotFoundDialog(self):
-        dlg = PhoneNotFoundDlg(self)
+    def phoneNotFoundDialog(self, phoneNo, orderNo):
+        dlg = PhoneNotFoundDlg(phoneNo, orderNo, self)
         dlg.exec()
     
     def openPasswordDialog(self):
