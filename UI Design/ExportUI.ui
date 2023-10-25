@@ -35,7 +35,7 @@
          </widget>
         </item>
         <item alignment="Qt::AlignHCenter">
-         <widget class="QDateEdit" name="dateEdit"/>
+         <widget class="QDateEdit" name="fromDateField"/>
         </item>
        </layout>
       </item>
@@ -49,7 +49,7 @@
          </widget>
         </item>
         <item alignment="Qt::AlignHCenter">
-         <widget class="QDateEdit" name="dateEdit_2"/>
+         <widget class="QDateEdit" name="toDateField"/>
         </item>
        </layout>
       </item>
@@ -63,7 +63,7 @@
          </widget>
         </item>
         <item alignment="Qt::AlignHCenter">
-         <widget class="QLineEdit" name="lineEdit"/>
+         <widget class="QLineEdit" name="phoneNoField"/>
         </item>
        </layout>
       </item>
