@@ -62,5 +62,5 @@ class Ui_MainWindow(object):
         self.exportButton.setText(_translate("MainWindow", "Export Phone Registry"))
         self.editTextButton.setText(_translate("MainWindow", "Edit Text Message"))
         self.VendorPhoneNo.setText(_translate("MainWindow", "Vendor Phone Number:"))
-        self.VendorPhoneNoInputField.setText(_translate("MainWindow", "(954) 773-1119"))
+        self.VendorPhoneNoInputField.setPlaceholderText(_translate("MainWindow", "(XXX) XXX-XXXX"))
         self.submitButton.setText(_translate("MainWindow", "Check if this number is registered"))
