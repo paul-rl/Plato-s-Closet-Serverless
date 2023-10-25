@@ -59,14 +59,14 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
     # Function called after successful password input. Allows exporting
     # database information.
     def openExportDialog(self):
-        dlg = ExportDlg(self)
+        dlg = ExportDlg(self.connection, self)
         dlg.exec()
 
     def registerNumber(self):
         # Remove all non-numeric characters from phone number
-        vendorPhoneNo = self.VendorPhoneNoInput.text()
+        vendorPhoneNo = self.VendorPhoneNoInput.text().strip()
         vendorPhoneNo = ''.join(c for c in vendorPhoneNo if c.isdigit())
-        orderNo = self.orderNoInput.text()
+        orderNo = self.orderNoInput.text().strip()
 
         # Clear input fields
         self.VendorPhoneNoInput.setText("")
