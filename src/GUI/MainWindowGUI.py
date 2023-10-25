@@ -38,6 +38,7 @@ class Ui_MainWindow(object):
         self.VendorPhoneNo.setObjectName("VendorPhoneNo")
         self.vendorInfoLayout.addWidget(self.VendorPhoneNo)
         self.VendorPhoneNoInputField = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.VendorPhoneNoInputField.setInputMask('(999) 999-9999')
         self.VendorPhoneNoInputField.setObjectName("VendorPhoneNoInputField")
         self.vendorInfoLayout.addWidget(self.VendorPhoneNoInputField)
         self.verticalLayout.addLayout(self.vendorInfoLayout)
