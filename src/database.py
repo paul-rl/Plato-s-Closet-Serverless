@@ -12,7 +12,7 @@ def connect():
 
 def create_table(connection):
     with connection:
-        connection.execute("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (date INTEGER, time INTEGER, phoneNo INTEGER, orderNo TEXT)")
+        connection.execute("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (date TEXT, time TEXT, phoneNo INTEGER, orderNo TEXT)")
 
 
 def addEntry(connection, dt, phoneNo, orderNo):
@@ -37,7 +37,7 @@ def query(connection, fromDate=None, toDate=None, phoneNo=None, orderNo=None):
     if fromDate is not None and toDate is not None:  # BETWEEN
         fromDateStr = fromDate.strftime("%Y-%m-%d")
         toDateStr = toDate.strftime("%Y-%m-%d")
-        dateCondition = "date BETWEEN " + fromDateStr + " AND " + toDateStr
+        dateCondition = "date BETWEEN '" + fromDateStr + "' AND '" + toDateStr + "'"
         conditions.append(dateCondition)
     elif fromDate is not None:  # >= From Date
         fromDateStr = fromDate.strftime("%Y-%m-%d")            
@@ -50,7 +50,8 @@ def query(connection, fromDate=None, toDate=None, phoneNo=None, orderNo=None):
     # No date condition if both from and to date are none
 
     # Next, create our phone # condition
-    if phoneNo is not None:
+    # TODO: Validate this input to make sure its valid
+    if len(phoneNo) == 10:
         phoneCondition = "phoneNo = " + str(phoneNo)
         conditions.append(phoneCondition)
 
