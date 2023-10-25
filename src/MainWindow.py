@@ -1,7 +1,9 @@
 from GUI import MainWindowGUI
 from PyQt5 import QtWidgets
-from pathlib import Path
 from PasswordEntryDlg import PasswordEntryDlg
+from EditTextDlg import EditTextDlg
+from ExportDlg import ExportDlg
+
 
 class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
     ''' Main window of the program'''
@@ -14,20 +16,24 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
         self.exportButton.clicked.connect(self.exportPhoneRegistry)
         self.submitButton.clicked.connect(self.registerNumber)
 
-        # Keep references of dialogues that can come from this main window
-    # Function called when the edit text message button is clicked. On click, 
-    # prompts the user to enter a password. On password success, the text edit 
+    # Function called when the edit text message button is clicked. On click,
+    # prompts the user to enter a password. On password success, the text edit
     # dialog pops up and the user can change the text message to be sent.
     def editTextMessage(self):
-        correctPassword = self.openPasswordDialog()
-        if correctPassword:
-            print("Password was correct!")
-            openTextEditDialog()
-        else:
-            print("Password was incorrect!")
+        self.openPasswordDialog()
+        self.openEditTextDialog()
+
+    def openEditTextDialog(self):
+        dlg = EditTextDlg(self)
+        dlg.exec()
+    
+    def openExportDialog(self):
+        dlg = ExportDlg(self)
+        dlg.exec()
 
     def exportPhoneRegistry(self):
-        print("Export Phone Registry")
+        self.openPasswordDialog()
+        self.openExportDialog()
 
     def registerNumber(self):
         print("Registering")

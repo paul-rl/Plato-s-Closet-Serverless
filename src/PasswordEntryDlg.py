@@ -14,7 +14,7 @@ class PasswordEntryDlg(QDialog):
         self.passwordCorrect = False
         # Connect submit button
         self.ui.submitButton.clicked.connect(self.verifyPassword)
-   
+
     def verifyPassword(self):
         self.passwordCorrect = self.ui.passwordField.text() == "123"
         if (self.passwordCorrect):
