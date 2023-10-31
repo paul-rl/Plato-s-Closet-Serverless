@@ -12,6 +12,7 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
     ''' Main window of the program'''
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.setupUi(self)
 
         # Start our database
