@@ -1,6 +1,7 @@
 from pathlib import Path
 from GUI import EditTextMessageGUI
 from PyQt5.QtWidgets import QDialog
+from textBody import getTextBody, setTextBody
 
 
 class EditTextDlg(QDialog):
@@ -18,16 +19,12 @@ class EditTextDlg(QDialog):
     # Sets the contents of the text box with the current message that will be
     # texted to vendors.
     def initializeTextEdit(self):
-        path = Path().parent.absolute()
-        f = open(path / 'src' / 'assets' / 'message.txt', 'r')
-        self.ui.textBox.setText(f.read())
-        f.close()
+        text = getTextBody()
+        self.ui.textBox.setText(text)
 
     # Confirms the changes made to the message that will be texted to vendors
     # and closes the dialog
+    # TODO: Ask wheter or not she wants to be able to put emojis in texts
     def confirmChanges(self):
-        path = Path().parent.absolute()
-        f = open(path / 'src' / 'assets' / 'text.txt', 'w')
-        f.write(self.ui.textBox.toPlainText())
-        f.close()
+        setTextBody(self.ui.textBox.toPlainText())
         self.close()
