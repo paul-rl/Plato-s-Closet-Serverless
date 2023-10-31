@@ -1,7 +1,6 @@
-from pathlib import Path
 from GUI import PhoneFoundGUI
 from PyQt5.QtWidgets import QDialog
-
+import messaging
 
 class PhoneFoundDlg(QDialog):
     ''' Phone Found dialog '''
@@ -17,5 +16,6 @@ class PhoneFoundDlg(QDialog):
         self.ui.noButton.clicked.connect(self.close)
 
     def sendText(self):
+        messaging.sendText(self.inputtedPhoneNo)
         print("Sent Text to " + self.inputtedPhoneNo)
         self.close()
