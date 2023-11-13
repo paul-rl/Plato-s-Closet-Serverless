@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
-    <height>225</height>
+    <width>395</width>
+    <height>194</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,14 +26,14 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <layout class="QHBoxLayout" name="adminButtonsLayout">
-       <item>
+       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
         <widget class="QPushButton" name="exportButton">
          <property name="text">
           <string>Export Phone Registry</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
         <widget class="QPushButton" name="editTextButton">
          <property name="text">
           <string>Edit Text Message</string>
@@ -44,26 +44,46 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="vendorInfoLayout">
-       <item>
-        <widget class="QLabel" name="VendorPhoneNo">
+       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <widget class="QLabel" name="VendorPhoneNoLabel">
          <property name="text">
           <string>Vendor Phone Number:</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLineEdit" name="VendorPhoneNoInputField">
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QLineEdit" name="VendorPhoneNoInput">
+         <property name="inputMask">
+          <string>(999) 999-9999</string>
+         </property>
          <property name="text">
-          <string>(954) 773-1119</string>
+          <string>() -</string>
+         </property>
+         <property name="cursorPosition">
+          <number>14</number>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <widget class="QLabel" name="orderNoLabel">
+         <property name="text">
+          <string>Order Number:</string>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <widget class="QLineEdit" name="orderNoInput"/>
+       </item>
+      </layout>
+     </item>
+     <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
       <widget class="QPushButton" name="submitButton">
        <property name="text">
-        <string>Check if this number is registered</string>
+        <string>Check if this number and order are registered</string>
        </property>
       </widget>
      </item>
@@ -75,7 +95,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>401</width>
+     <width>395</width>
      <height>21</height>
     </rect>
    </property>

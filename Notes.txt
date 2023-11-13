@@ -1,0 +1,22 @@
+For querying message
+Need to:
+1. Add query message
+2. Send query result back to client
+3. Convert query to csv in client side
+
+
+Functionality to test:
+1. Export csv
+2. Change text message (Ask about emojis again)
+3. Register to db
+4. Send text to unverified phone number
+5. Send message from client to server:
+    a. disconnect
+    b. sendText
+    c. query
+    d. 
+
+Things still to implement:
+1. Message queue to avoid concurrent r/w to db
+2. Fixup UI, A LOT
+3. Password implementation
