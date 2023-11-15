@@ -1,6 +1,7 @@
 import socket
 import localMessagingConstants as msgCons
 from datetime import date
+from math import ceil
 
 class ClientMessagingHandler:
     def __init__(self) -> None:
@@ -27,16 +28,36 @@ class ClientMessagingHandler:
     def sendSendTextMsg(self, phoneNo):
         self.__send(f'{msgCons.SEND_TEXT_MESSAGE}{msgCons.TYPE_SEPARATOR}{phoneNo}')
 
-    def sendQueryMsg(self,
-                     fromDate: date,
-                     toDate: date,
-                     phoneNo: int,
-                     orderNo: int):
+    def __sendQueryMsg(self,
+                       fromDate: date,
+                       toDate: date,
+                       phoneNo: int):
         fDate = fromDate.strftime("%Y-%m-%d")
         tDate = toDate.strftime("%Y-%m-%d")
-        queryTuple = (fDate, tDate, str(phoneNo), str(orderNo))
+        queryTuple = (fDate, tDate, str(phoneNo))
         data = msgCons.INTRA_SEPARATOR.join(queryTuple)
         self.__send(f'{msgCons.QUERY_MESSAGE}{msgCons.TYPE_SEPARATOR}{data}')
+
+    def queryWithResults(self,
+                         fromDate: date,
+                         toDate: date,
+                         phoneNo: int,):
+        self.__sendQueryMsg(fromDate, toDate, phoneNo)
+        return self.__receiveQueryResult()
+
+    def __receiveQueryResult(self):
+        response = b""
+        responseLen = self.__socket.recv(self.HEADER)
+        if responseLen:
+            responseLen = int(responseLen)
+            # Need to parse multiple messages
+            if responseLen > self.HEADER:
+                numMessages = ceil(responseLen / self.HEADER)
+                for i in range(0, numMessages):
+                    response += self.__socket.recv(self.HEADER)
+            else:
+                response = self.__socket.recv(self.HEADER)
+        return response.decode(self.FORMAT)
 
     def __send(self, msg):
         ''' Send message stating length of next message'''
