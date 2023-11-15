@@ -4,6 +4,7 @@ import threading
 from messaging import sendTextMessage
 from database import Database
 import localMessagingConstants as msgCons
+from math import ceil
 
 
 class Server:
@@ -14,15 +15,6 @@ class Server:
         self.IP = socket.gethostbyname(socket.gethostname())
         self.ADDR = (self.IP, self.PORT)
         self.ENCODING_FORMAT = 'utf-8'
-        
-        # TODO: Write wrapper function for this so we can pass arguments to individual functions
-        # i.e.: handleMessage(*optional args*), optional args are used for each
-        # different subfunction in function map
-        self.FUNCTION_MAP = {
-            msgCons.SEND_TEXT_MESSAGE: self.__sendText,
-            msgCons.ADD_ENTRY_MESSAGE: self.__registerNumber,
-            msgCons.DISCONNECT_MESSAGE: self.__disconnectClient
-        }
 
         self.__activeConnections = set()
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -63,19 +55,14 @@ class Server:
 
     def __handleMessage(self, conn: socket.socket, msg: str):
         msgType, data = msg.split(msgCons.TYPE_SEPARATOR)
-        if msgType == msgCons.QUERY_MESSAGE:
-            if msgType is msgCons.QUERY_MESSAGE:
-                print("wtf?")
-            print("huh?")
+
         if msgType == msgCons.SEND_TEXT_MESSAGE:
-            # TODO: Might need to parsa data to right type
             self.__sendText(data)
         elif msgType == msgCons.ADD_ENTRY_MESSAGE:
-            # TODO: Might need to parsa data to right type
             self.__registerNumber(data)
         elif msgType == msgCons.QUERY_MESSAGE:
             query = self.__queryDb(data)
-            self.__returnQuery(query)
+            self.__returnQuery(conn, query)
         elif msgType == msgCons.DISCONNECT_MESSAGE:
             self.__disconnectClient(conn)
         else:
@@ -91,14 +78,39 @@ class Server:
         # Change datetime to unix time, change db if unix to UNSENT
         self.db.addEntry(
             datetime.datetime.now(),
-            phoneNo=phoneNo,
-            orderNo=23
+            phoneNo=phoneNo
         )
 
     def __queryDb(self, data: str):
         fields = data.split(msgCons.INTRA_SEPARATOR)
-        print("fields")
-        print(fields)
+        if fields[0] == msgCons.DEFAULT_DATE:
+            fields[0] = None
+        if fields[1] == msgCons.DEFAULT_DATE:
+            fields[1] = None
         return self.db.query(*fields)
 
-    
+    def __returnQuery(self, conn: socket.socket, query):
+        # check how message size relates to sending message
+        # Make protocol for splitting long messages
+        msg = ':'.join({"apple", "potato", "banana", "water", "juice", "milk", "kiwi", "pineapple", "pen"})
+        print(msg)
+
+        message = msg.encode(self.ENCODING_FORMAT)
+        msgLen = len(message)
+        sendLen = str(msgLen).encode(self.ENCODING_FORMAT)
+        # Pad length message to header specified length
+        sendLen += b' ' * (self.HEADER - len(sendLen))
+        print(f"Sending length: {sendLen}")
+        conn.send(sendLen)
+
+        # Information must be relayed across multiple messages
+        if msgLen > self.HEADER:
+            numMessages = ceil(msgLen / self.HEADER)
+            for i in range(0, numMessages):
+                startIdx = i * self.HEADER
+                chunk = message[startIdx:startIdx + self.HEADER]
+                print(f"Sending chunk {chunk}")
+                conn.send(chunk)
+        else:
+            print(f"Sending message {message}")
+            conn.send(message)
