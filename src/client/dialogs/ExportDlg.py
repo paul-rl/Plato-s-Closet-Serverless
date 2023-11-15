@@ -21,7 +21,6 @@ class ExportDlg(QDialog):
         phoneNo = self.ui.phoneNoField.text()
 
         self.pt.msgHandler.sendQueryMsg(fromDate, toDate, phoneNo, 1)
-        results = database.query(self.dbConnection, fromDate, toDate, phoneNo)
         options = QFileDialog.Options()
         file_name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', 'CSV Files(*.csv)', options=options)
         
