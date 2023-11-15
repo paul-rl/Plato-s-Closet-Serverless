@@ -31,55 +31,6 @@ class Server:
         ''' Database setup '''
         self.db = Database()
 
-    def __disconnectClient(self, conn):
-        self.__activeConnections.remove(conn)
-
-    def __handleMessage(self, conn: socket.socket, msg: str):
-        msgType, data = msg.split(msgCons.TYPE_SEPARATOR)
-        if msgType is msgCons.SEND_TEXT_MESSAGE:
-            # TODO: Might need to parsa data to right type
-            self.__sendText(data)
-        elif msgType is msgCons.ADD_ENTRY_MESSAGE:
-            # TODO: Might need to parsa data to right type
-            self.__registerNumber(data)
-        elif msgType is msgCons.QUERY_MESSAGE:
-            query = self.__queryDb(data)
-            self.__returnQuery(query)
-        elif msgType is msgCons.DISCONNECT_MESSAGE:
-            self.__disconnectClient(conn)
-
-    def handle_client(self, conn, addr):
-        self.__activeConnections.add(conn)
-        print(f'[NEW CONNECTION] {addr} connected.')
-
-        while conn in self.__activeConnections:
-            ''' First message contains information regarding
-                the size of the following message.'''
-            msgLen = conn.recv(self.HEADER).decode(self.FORMAT)
-            if msgLen:
-                print("Message len contents " + str(msgLen))
-                msgLen = int(msgLen)
-                msg = conn.recv(msgLen).decode(self.FORMAT)
-                self.__handleMessage()
-
-                print(f'[{addr}] {msg}')
-        conn.close()
-
-    def __sendText(phoneNo: str):
-        sendTextMessage(phoneNo)
-
-    def __registerNumber(self, phoneNo: str):
-        # Change datetime to unix time, change db if unix to UNSENT
-        self.db.addEntry(
-            datetime.datetime.now(),
-            phoneNo=phoneNo,
-            orderNo=23
-        )
-    
-    def __queryDb(self, data: str):
-        fields = data.split(msgCons.INTRA_SEPARATOR)
-        self.db.query()
-
     def start(self):
         print('[STARTING] Server is starting')
         self.__socket.listen()
@@ -92,3 +43,62 @@ class Server:
             thread = threading.Thread(target=self.handle_client, args=(conn, addr))
             thread.start()
             print(f'[ACTIVE CONNECTIONS] {threading.active_count() - 1}')
+
+    def handle_client(self, conn, addr):
+        self.__activeConnections.add(conn)
+        print(f'[NEW CONNECTION] {addr} connected.')
+
+        while conn in self.__activeConnections:
+            ''' First message contains information regarding
+                the size of the following message.'''
+            msgLen = conn.recv(self.HEADER).decode(self.ENCODING_FORMAT)
+            if msgLen:
+                print("Message len contents " + str(msgLen))
+                msgLen = int(msgLen)
+                msg = conn.recv(msgLen).decode(self.ENCODING_FORMAT)
+                self.__handleMessage(conn, msg)
+
+                print(f'[{addr}] {msg}')
+        conn.close()
+
+    def __handleMessage(self, conn: socket.socket, msg: str):
+        msgType, data = msg.split(msgCons.TYPE_SEPARATOR)
+        if msgType == msgCons.QUERY_MESSAGE:
+            if msgType is msgCons.QUERY_MESSAGE:
+                print("wtf?")
+            print("huh?")
+        if msgType == msgCons.SEND_TEXT_MESSAGE:
+            # TODO: Might need to parsa data to right type
+            self.__sendText(data)
+        elif msgType == msgCons.ADD_ENTRY_MESSAGE:
+            # TODO: Might need to parsa data to right type
+            self.__registerNumber(data)
+        elif msgType == msgCons.QUERY_MESSAGE:
+            query = self.__queryDb(data)
+            self.__returnQuery(query)
+        elif msgType == msgCons.DISCONNECT_MESSAGE:
+            self.__disconnectClient(conn)
+        else:
+            print("Error: Invalid message type")
+
+    def __disconnectClient(self, conn):
+        self.__activeConnections.remove(conn)
+
+    def __sendText(phoneNo: str):
+        sendTextMessage(phoneNo)
+
+    def __registerNumber(self, phoneNo: str):
+        # Change datetime to unix time, change db if unix to UNSENT
+        self.db.addEntry(
+            datetime.datetime.now(),
+            phoneNo=phoneNo,
+            orderNo=23
+        )
+
+    def __queryDb(self, data: str):
+        fields = data.split(msgCons.INTRA_SEPARATOR)
+        print("fields")
+        print(fields)
+        return self.db.query(*fields)
+
+    
