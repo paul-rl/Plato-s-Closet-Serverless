@@ -1,5 +1,6 @@
+import typing
 from GUI import MainWindowGUI
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtGui, QtWidgets, QtCore
 from dialogs.PasswordEntryDlg import PasswordEntryDlg
 from dialogs.EditTextDlg import EditTextDlg
 from dialogs.ExportDlg import ExportDlg
@@ -8,6 +9,7 @@ from dialogs.PhoneNotFoundDlg import PhoneNotFoundDlg
 from clientMessagingHandler import ClientMessagingHandler
 
 
+# TODO: Send message to server to sever connection on window close
 class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
     ''' Main window of the program'''
     def __init__(self):
@@ -64,33 +66,27 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
         # Remove all non-numeric characters from phone number
         vendorPhoneNo = self.VendorPhoneNoInput.text().strip()
         vendorPhoneNo = ''.join(c for c in vendorPhoneNo if c.isdigit())
-        orderNo = self.orderNoInput.text().strip()
 
         # Clear input fields
         self.VendorPhoneNoInput.setText("")
-        self.orderNoInput.setText("")
         
         #TODO: Make this validation more rigorous
-        if len(vendorPhoneNo) == 10 and len(orderNo) >= 1:
-            if database.contains(self.connection, vendorPhoneNo, orderNo):
-                self.phoneFoundDialog(vendorPhoneNo, orderNo)
+        if len(vendorPhoneNo) == 10:
+            if self.msgHandler.queryWithResults() is not None:
+                self.phoneFoundDialog(vendorPhoneNo)
             else:
-                self.phoneNotFoundDialog(vendorPhoneNo, orderNo)
+                self.phoneNotFoundDialog(vendorPhoneNo)
         else:
-            print("Please provide a valid input")
-            # One of a couple of options..
-            # 1. Please enter a valid phone number
-            # 2. Please eneter a valid order number
-            # 3. The order number you entered does not match with this phone
+            print("Please provide a valid phone #")
 
-    def phoneFoundDialog(self, phoneNo, orderNo):
-        dlg = PhoneFoundDlg(phoneNo, orderNo, self)
+    def phoneFoundDialog(self, phoneNo):
+        dlg = PhoneFoundDlg(phoneNo, self)
         dlg.exec()
 
-    def phoneNotFoundDialog(self, phoneNo, orderNo):
-        dlg = PhoneNotFoundDlg(phoneNo, orderNo, self)
+    def phoneNotFoundDialog(self, phoneNo):
+        dlg = PhoneNotFoundDlg(phoneNo, self)
         dlg.exec()
-    
+
     def openPasswordDialog(self):
         dlg = PasswordEntryDlg(self)
         dlg.exec()
