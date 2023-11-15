@@ -1,6 +1,6 @@
 import socket
 import localMessagingConstants as msgCons
-
+from datetime import date
 
 class ClientMessagingHandler:
     def __init__(self) -> None:
@@ -27,8 +27,14 @@ class ClientMessagingHandler:
     def sendSendTextMsg(self, phoneNo):
         self.__send(f'{msgCons.SEND_TEXT_MESSAGE}{msgCons.TYPE_SEPARATOR}{phoneNo}')
 
-    def sendQueryMsg(self, fromDate, toDate, phoneNo, orderNo):
-        queryTuple = (fromDate, toDate, phoneNo, orderNo)
+    def sendQueryMsg(self,
+                     fromDate: date,
+                     toDate: date,
+                     phoneNo: int,
+                     orderNo: int):
+        fDate = fromDate.strftime("%Y-%m-%d")
+        tDate = toDate.strftime("%Y-%m-%d")
+        queryTuple = (fDate, tDate, str(phoneNo), str(orderNo))
         data = msgCons.INTRA_SEPARATOR.join(queryTuple)
         self.__send(f'{msgCons.QUERY_MESSAGE}{msgCons.TYPE_SEPARATOR}{data}')
 
