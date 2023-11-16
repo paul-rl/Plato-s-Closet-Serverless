@@ -11,7 +11,7 @@ class PhoneNotFoundDlg(QDialog):
         self.inputtedPhoneNo = phoneNo
 
         # Connect buttons
-        self.ui.yesButton.clicked.connect(self.addToDb)
+        self.ui.yesButton.clicked.connect(self.sendAddEntryMessage)
         self.ui.noButton.clicked.connect(self.close)
 
     # Currently, this is the time at which the person was registered...
