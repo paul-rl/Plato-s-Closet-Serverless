@@ -7,6 +7,8 @@ from dialogs.ExportDlg import ExportDlg
 from dialogs.PhoneFoundDlg import PhoneFoundDlg
 from dialogs.PhoneNotFoundDlg import PhoneNotFoundDlg
 from clientMessagingHandler import ClientMessagingHandler
+from database import Database
+from messaging import TextingClient
 
 
 # TODO: Send message to server to sever connection on window close
@@ -14,10 +16,13 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
     ''' Main window of the program'''
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
+        self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.setupUi(self)
 
-        self.msgHandler = ClientMessagingHandler()
+        self.db = Database()
+        self.textClient = TextingClient()
+        
 
         # Connect buttons
         self.editTextButton.clicked.connect(self.editTextMessage)
@@ -63,16 +68,17 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
         dlg.exec()
 
     def registerNumber(self):
+        print("Registering")
         # Remove all non-numeric characters from phone number
         vendorPhoneNo = self.VendorPhoneNoInput.text().strip()
         vendorPhoneNo = ''.join(c for c in vendorPhoneNo if c.isdigit())
 
         # Clear input fields
         self.VendorPhoneNoInput.setText("")
-        
-        #TODO: Make this validation more rigorous
+
         if len(vendorPhoneNo) == 10:
-            if self.msgHandler.queryWithResults() is not None:
+            result = self.db.query(phoneNo=vendorPhoneNo)
+            if result:
                 self.phoneFoundDialog(vendorPhoneNo)
             else:
                 self.phoneNotFoundDialog(vendorPhoneNo)
