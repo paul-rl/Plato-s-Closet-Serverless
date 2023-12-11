@@ -17,5 +17,5 @@ class PhoneNotFoundDlg(QDialog):
     # Currently, this is the time at which the person was registered...
     # Might need to do two different times, registered time and sent time
     def sendAddEntryMessage(self):
-        self.parent().msgHandler.sendAddEntryMsg(self.inputtedPhoneNo)
+        self.parent().db.addEntry(self.inputtedPhoneNo)
         self.close()

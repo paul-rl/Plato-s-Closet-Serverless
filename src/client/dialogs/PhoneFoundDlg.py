@@ -1,3 +1,4 @@
+from datetime import datetime
 from GUI import PhoneFoundGUI
 from PyQt5.QtWidgets import QDialog
 
@@ -15,6 +16,8 @@ class PhoneFoundDlg(QDialog):
         self.ui.noButton.clicked.connect(self.close)
 
     def sendText(self):
-        self.parent().msgHandler.sendSendTextMsg(self.inputtedPhoneNo)
+        self.parent().textClient.sendTextMessage(self.inputtedPhoneNo)
+        
+        self.parent().db.reportMessage(self.inputtedPhoneNo, datetime.now())
         print("Sent Text to " + self.inputtedPhoneNo)
         self.close()
