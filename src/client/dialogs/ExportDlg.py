@@ -20,10 +20,10 @@ class ExportDlg(QDialog):
         toDate = self.ui.toDateField.date().toPyDate()
         phoneNo = self.ui.phoneNoField.text()
 
-        self.pt.msgHandler.sendQueryMsg(fromDate, toDate, phoneNo, 1)
+        results = self.pt.db.query(fromDate, toDate, phoneNo)
         options = QFileDialog.Options()
         file_name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', 'CSV Files(*.csv)', options=options)
-        
+
         if file_name:
             with open(file_name, 'w', newline='') as f:
                 csvWriter = csv.writer(f)
@@ -38,5 +38,4 @@ class ExportDlg(QDialog):
             #TODO: There was an error exporting your file
             print("Error exporting your file")
             self.close()
-            return False       
-        
+            return False
