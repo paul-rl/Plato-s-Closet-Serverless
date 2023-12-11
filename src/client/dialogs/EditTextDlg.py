@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog
 from pathlib import Path
 import sys
 sys.path.insert(0, str(Path().parent.absolute() / 'src'))
-import shared.textBody
+from shared.textBody import getTextBody, setTextBody
 
 class EditTextDlg(QDialog):
     ''' Edit Text dialog '''
