@@ -15,7 +15,6 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(373, 194)
-        self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -27,6 +26,9 @@ class Ui_MainWindow(object):
         self.exportButton = QtWidgets.QPushButton(self.centralwidget)
         self.exportButton.setObjectName("exportButton")
         self.adminButtonsLayout.addWidget(self.exportButton, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        self.registerButton = QtWidgets.QPushButton(self.centralwidget)
+        self.registerButton.setObjectName("registerButton")
+        self.adminButtonsLayout.addWidget(self.registerButton)
         self.editTextButton = QtWidgets.QPushButton(self.centralwidget)
         self.editTextButton.setObjectName("editTextButton")
         self.adminButtonsLayout.addWidget(self.editTextButton, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
@@ -61,6 +63,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.exportButton.setText(_translate("MainWindow", "Export Phone Registry"))
+        self.registerButton.setText(_translate("MainWindow", "Enter Register Number"))
         self.editTextButton.setText(_translate("MainWindow", "Edit Text Message"))
         self.VendorPhoneNoLabel.setText(_translate("MainWindow", "Vendor Phone Number:"))
         self.VendorPhoneNoInput.setInputMask(_translate("MainWindow", "(999) 999-9999"))

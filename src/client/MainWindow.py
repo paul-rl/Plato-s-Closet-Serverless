@@ -1,17 +1,18 @@
 import typing
 from GUI import MainWindowGUI
 from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt5.QtWidgets import QMessageBox
 from dialogs.PasswordEntryDlg import PasswordEntryDlg
 from dialogs.EditTextDlg import EditTextDlg
 from dialogs.ExportDlg import ExportDlg
 from dialogs.PhoneFoundDlg import PhoneFoundDlg
 from dialogs.PhoneNotFoundDlg import PhoneNotFoundDlg
-from clientMessagingHandler import ClientMessagingHandler
+from dialogs.RegisterDlg import RegisterDlg
 from database import Database
 from messaging import TextingClient
+from util import displayErrorDlg
 
 
-# TODO: Send message to server to sever connection on window close
 class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
     ''' Main window of the program'''
     def __init__(self):
@@ -20,13 +21,15 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.setupUi(self)
 
+        self.registerNo = -1
         self.db = Database()
         self.textClient = TextingClient()
-        
+
 
         # Connect buttons
         self.editTextButton.clicked.connect(self.editTextMessage)
         self.exportButton.clicked.connect(self.exportPhoneRegistry)
+        self.registerButton.clicked.connect(self.RegisterDialog)
         self.submitButton.clicked.connect(self.registerNumber)
 
         # Set event filter for vendor # cursor position
@@ -68,6 +71,9 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
         dlg.exec()
 
     def registerNumber(self):
+        if self.registerNo == -1:
+            displayErrorDlg(self, "Please input a register number before proceeding")
+            return
         print("Registering")
         # Remove all non-numeric characters from phone number
         vendorPhoneNo = self.VendorPhoneNoInput.text().strip()
@@ -83,7 +89,14 @@ class MainWindow(QtWidgets.QMainWindow, MainWindowGUI.Ui_MainWindow):
             else:
                 self.phoneNotFoundDialog(vendorPhoneNo)
         else:
-            print("Please provide a valid phone #")
+            displayErrorDlg(self, "Please provide a valid phone number")
+
+    def RegisterDialog(self):
+        dlg = RegisterDlg(self)
+        dlg.exec()
+
+    def setRegisterNumber(self, num):
+        self.registerNo = num
 
     def phoneFoundDialog(self, phoneNo):
         dlg = PhoneFoundDlg(phoneNo, self)

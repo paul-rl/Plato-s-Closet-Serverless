@@ -26,6 +26,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="registerButton">
+          <property name="text">
+           <string>Enter Register Number</string>
+          </property>
+         </widget>
+        </item>
         <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
          <widget class="QPushButton" name="editTextButton">
           <property name="text">
