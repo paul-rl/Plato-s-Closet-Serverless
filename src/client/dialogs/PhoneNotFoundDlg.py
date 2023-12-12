@@ -1,4 +1,3 @@
-from pathlib import Path
 from GUI import PhoneNotFoundGUI
 from PyQt5.QtWidgets import QDialog
 

@@ -1,7 +1,9 @@
 from GUI import ExportGUI
 from PyQt5.QtWidgets import QDialog, QFileDialog
 import csv
+from dialogs.ExportErrDlg import ExportErrDlg
 from pathlib import Path
+from util import displayErrorDlg
 
 class ExportDlg(QDialog):
     ''' Export dialog '''
@@ -25,17 +27,18 @@ class ExportDlg(QDialog):
         file_name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', 'CSV Files(*.csv)', options=options)
 
         if file_name:
-            with open(file_name, 'w', newline='') as f:
-                csvWriter = csv.writer(f)
-                for row in results:
-                    csvWriter.writerow(row)
+            try:
+                with open(file_name, 'w', newline='') as f:
+                    csvWriter = csv.writer(f)
+                    for row in results:
+                        csvWriter.writerow(row)
 
-                self.setWindowTitle(str(Path().parent.absolute() / file_name) + " - Phone Registry")
-                self.close()
-                print("Exported!")
-                return True
+                    self.setWindowTitle(str(Path().parent.absolute() / file_name) + " - Phone Registry")
+                    self.close()
+                    print("Exported!")
+                    return True
+            except:
+                displayErrorDlg("Error exporting your file")
         else:
-            #TODO: There was an error exporting your file
-            print("Error exporting your file")
             self.close()
             return False

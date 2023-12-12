@@ -17,7 +17,6 @@ class PhoneFoundDlg(QDialog):
 
     def sendText(self):
         self.parent().textClient.sendTextMessage(self.inputtedPhoneNo)
-        
         self.parent().db.reportMessage(self.inputtedPhoneNo, datetime.now())
         print("Sent Text to " + self.inputtedPhoneNo)
         self.close()

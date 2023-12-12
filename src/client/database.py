@@ -104,7 +104,6 @@ class Database:
         # No date condition if both from and to date are none
 
         # Next, create our phone # condition
-        # TODO: Validate this input to make sure its valid
         if phoneNo is not None and len(phoneNo) == 10:
             phoneCondition = "phoneNo = " + str(phoneNo)
             conditions.append(phoneCondition)
